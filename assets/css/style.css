@@ -68,3 +68,9 @@ a.hero-project:hover{border-color:#faf8f780}
 @media(max-width:1150px){.header-phone{font-size:11px}.nav-actions{gap:12px}}
 @media(max-width:700px){.header-phone{font-size:11px}.nav-actions{gap:9px}}
 @media(max-width:390px){.header-phone{font-size:10px}}
+
+/* Homepage final CTA: make direct calling the primary action */
+.cta-section .cta-phone-actions{align-items:center;gap:24px}
+.cta-section .cta-phone-button{font-size:17px;font-weight:800;min-height:58px;padding:17px 30px;white-space:nowrap}
+.cta-section .cta-secondary-link{font-size:12px;font-weight:600;opacity:.9}
+@media(max-width:700px){.cta-section .cta-phone-actions{gap:17px}.cta-section .cta-phone-button{font-size:15px;padding:16px 23px;max-width:100%;white-space:normal}.cta-section .cta-secondary-link{font-size:12px}}
