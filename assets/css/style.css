@@ -60,3 +60,11 @@ body.previews-background .motion-scene .project-shot img{animation-play-state:pa
 .project-card-copy .project-site-link{display:inline-flex;align-items:center;min-height:44px;margin-top:10px;color:var(--brand);font-size:12px;font-weight:750;line-height:1.5;text-decoration:underline;text-underline-offset:4px}
 .project-site-link:hover{color:var(--ink)}
 a.hero-project:hover{border-color:#faf8f780}
+
+/* Phone contact in site header */
+.header-phone{display:inline-flex;align-items:center;white-space:nowrap;color:#581c32;font-size:13px;font-weight:700;text-decoration:none;line-height:1.3}
+.header-phone:hover{text-decoration:underline;text-underline-offset:4px}
+.header-phone:focus-visible{outline:2px solid #581c32;outline-offset:5px;border-radius:3px}
+@media(max-width:1150px){.header-phone{font-size:11px}.nav-actions{gap:12px}}
+@media(max-width:700px){.header-phone{font-size:11px}.nav-actions{gap:9px}}
+@media(max-width:390px){.header-phone{font-size:10px}}
