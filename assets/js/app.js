@@ -33,10 +33,8 @@
    const business=String(values.get('business')||'').trim();if(business)lines.push('Negocio: '+business);
    if(selected.size)lines.push('Servicios: '+[...selected].map(id=>serviceMap.get(id).title).join(', '));
    const message=String(values.get('message')||'').trim();if(message)lines.push('','Mi proyecto: '+message);
-   const text=lines.join('\n');$('request-preview').textContent=text;
-   $('request-whatsapp').href='https://wa.me/'+cfg.whatsapp+'?text='+encodeURIComponent(text);
-   $('request-email').href='mailto:'+cfg.email+'?subject='+encodeURIComponent('Solicitud de propuesta · HL Digital')+'&body='+encodeURIComponent(text);
-   openDialog('request-dialog');
+   const text=lines.join('\n');
+   window.location.assign('https://wa.me/'+cfg.whatsapp+'?text='+encodeURIComponent(text));
   });
  }
  document.addEventListener('click',e=>{
