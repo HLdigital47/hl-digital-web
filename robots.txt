@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hl-digital-agencia-web.np7541078.chatgpt.site/sitemap.xml
