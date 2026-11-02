@@ -27,16 +27,34 @@
  }
  function bindForm(){
   const form=$('project-form');if(!form)return;
-  form.addEventListener('submit',e=>{
-   e.preventDefault();const values=new FormData(form);
-   const lines=['Hola, HL Digital. Me gustaría solicitar una propuesta.','',`Nombre: ${String(values.get('name')||'').trim()}`,`Contacto: ${String(values.get('contact')||'').trim()}`];
-   const business=String(values.get('business')||'').trim();if(business)lines.push('Negocio: '+business);
-   if(selected.size)lines.push('Servicios: '+[...selected].map(id=>serviceMap.get(id).title).join(', '));
-   const message=String(values.get('message')||'').trim();if(message)lines.push('','Mi proyecto: '+message);
-   const text=lines.join('\n');
-   window.location.assign('https://wa.me/'+cfg.whatsapp+'?text='+encodeURIComponent(text));
+  let status=$('form-status');
+  if(!status){status=document.createElement('p');status.id='form-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');form.querySelector('.form-bottom')?.appendChild(status);}
+  form.addEventListener('submit',async e=>{
+   e.preventDefault();if(!form.reportValidity())return;
+   const button=form.querySelector('[type="submit"]'),label=button.textContent,values=new FormData(form);
+   const data=new URLSearchParams();
+   data.set('name',String(values.get('name')||'').trim());
+   data.set('business',String(values.get('business')||'').trim());
+   data.set('contact',String(values.get('contact')||'').trim());
+   data.set('service',[...selected].map(id=>serviceMap.get(id).title).join(', ')||'Consulta general');
+   data.set('message',String(values.get('message')||'').trim());
+   data.set('website',String(values.get('website')||'').trim());
+   status.textContent='Enviando tu solicitud…';status.className='form-status';
+   button.disabled=true;button.textContent='Enviando…';
+   try{
+    // Google Apps Script doesn't permit reading browser cross-origin responses.
+    // This confirms transmission, not that Google Sheets saved it.
+    await fetch(cfg.formEndpoint,{method:'POST',mode:'no-cors',body:data,redirect:'follow'});
+    status.textContent='Tu solicitud se envió para procesamiento. Nos pondremos en contacto contigo. Si necesitas ayuda inmediata, utiliza el botón de WhatsApp.';
+    status.className='form-status is-sent';
+    form.reset();selected.clear();persist();
+   }catch(error){
+    status.textContent='No fue posible enviar el formulario. Inténtalo de nuevo o contáctanos por teléfono.';
+    status.className='form-status is-error';
+   }finally{button.disabled=false;button.textContent=label;}
   });
  }
+
  document.addEventListener('click',e=>{
   const motion=e.target.closest('[data-motion-toggle]');
   if(motion){
