@@ -81,24 +81,16 @@
   d.addEventListener('close',()=>{if(!all('dialog[open]').length){document.body.classList.remove('modal-open');if(lastFocus?.isConnected)lastFocus.focus({preventScroll:true});}});
  });
  document.addEventListener('keydown',e=>{if(e.key==='Escape')all('.nav-services[open]').forEach(d=>d.open=false);});
- const header=document.querySelector('.site-header');let scheduled=false;
- function updateHeader(){header.classList.toggle('is-sticky',window.scrollY>140);scheduled=false;}
- window.addEventListener('scroll',()=>{if(!scheduled){requestAnimationFrame(updateHeader);scheduled=true;}},{passive:true});updateHeader();
  function setupProjectMotion(){
   const scenes=all('.motion-scene');if(!scenes.length||!('IntersectionObserver' in window)||!('ResizeObserver' in window))return;
   const visible=new IntersectionObserver(entries=>entries.forEach(entry=>entry.target.classList.toggle('is-visible',entry.isIntersecting)),{threshold:.12});
-  const measure=scene=>{
-   const frame=scene.querySelector('.project-shot'),img=frame.querySelector('img');if(!img.naturalWidth)return;
-   const travel=Math.max(0,img.getBoundingClientRect().height-frame.clientHeight);
-   frame.style.setProperty('--preview-travel',`${-travel}px`);
-   frame.style.setProperty('--preview-duration',`${Math.max(26,Math.min(64,travel/16*2+8))}s`);
-   scene.classList.toggle('is-scrollable',travel>1);
-  };
-  const resized=new ResizeObserver(entries=>entries.forEach(entry=>measure(entry.target.closest('.motion-scene'))));
+  const pending=new Set();let measurementFrame=0;
+  const scheduleMeasure=scene=>{pending.add(scene);if(measurementFrame)return;measurementFrame=requestAnimationFrame(()=>{measurementFrame=0;const measurements=[...pending].map(scene=>{const frame=scene.querySelector('.project-shot'),img=frame.querySelector('img');return {scene,frame,travel:img.naturalWidth?Math.max(0,frame.clientWidth*img.naturalHeight/img.naturalWidth-frame.clientHeight):0};});pending.clear();measurements.forEach(({scene,frame,travel})=>{frame.style.setProperty('--preview-travel',`${-travel}px`);frame.style.setProperty('--preview-duration',`${Math.max(26,Math.min(64,travel/16*2+8))}s`);scene.classList.toggle('is-scrollable',travel>1);});});};
+  const resized=new ResizeObserver(entries=>entries.forEach(entry=>scheduleMeasure(entry.target.closest('.motion-scene'))));
   scenes.forEach(scene=>{
    const img=scene.querySelector('.project-shot img');
    scene.classList.add('motion-ready');visible.observe(scene);resized.observe(scene.querySelector('.project-shot'));
-   if(img.complete)measure(scene);else img.addEventListener('load',()=>measure(scene),{once:true});
+   if(img.complete)scheduleMeasure(scene);else img.addEventListener('load',()=>scheduleMeasure(scene),{once:true});
   });
   const tabVisibility=()=>document.body.classList.toggle('previews-background',document.hidden);
   document.addEventListener('visibilitychange',tabVisibility);tabVisibility();
