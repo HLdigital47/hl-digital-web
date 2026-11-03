@@ -47,6 +47,7 @@
     await fetch(cfg.formEndpoint,{method:'POST',mode:'no-cors',body:data,redirect:'follow'});
     status.textContent='Su solicitud se envió exitosamente. Nos pondremos en contacto contigo. Si necesitas ayuda inmediata, utiliza el botón de WhatsApp o llámanos.';
     status.className='form-status is-sent';
+    document.dispatchEvent(new CustomEvent('hl:form-submitted'));
     form.reset();selected.clear();persist();
    }catch(error){
     status.textContent='No fue posible enviar el formulario. Inténtalo de nuevo o contáctanos por teléfono.';
