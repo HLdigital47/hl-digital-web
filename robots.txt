@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://hl-digital-web.unitedhtx128.workers.dev/sitemap.xml
+Sitemap: https://hldigitalweb.com/sitemap.xml
