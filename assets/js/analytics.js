@@ -17,3 +17,23 @@ gtag('config','G-47HC7WZ2TP');
     event('estimate_request',{form_location:location.pathname});
   });
 })();
+
+/* Let the initial document and its images finish before downloading GA.
+   Calls above stay queued in dataLayer, including early contact events. */
+(function(){
+  let started=false;
+  function loadAnalytics(){
+    if(started||document.querySelector('script[src^="https://www.googletagmanager.com/gtag/js"]'))return;
+    started=true;
+    const script=document.createElement('script');
+    script.async=true;
+    script.src='https://www.googletagmanager.com/gtag/js?id=G-47HC7WZ2TP';
+    document.head.appendChild(script);
+  }
+  function afterLoad(){
+    if('requestIdleCallback' in window)window.requestIdleCallback(loadAnalytics,{timeout:1500});
+    else loadAnalytics();
+  }
+  if(document.readyState==='complete')afterLoad();
+  else window.addEventListener('load',afterLoad,{once:true});
+})();

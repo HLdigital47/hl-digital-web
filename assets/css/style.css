@@ -107,3 +107,6 @@ a.hero-project:hover{border-color:#faf8f780}
 
 /* Prefer the smaller AVIF hero while retaining WebP for older browsers. */
 .page-home .hero:before{background-image:image-set(url("../img/web-design-720.avif") type("image/avif"),url("../img/web-design-720.webp") type("image/webp"))}
+
+/* Avoid full-hero filter and backdrop compositing on small screens. */
+@media(max-width:700px){.page-home .hero:before{filter:none}.page-home .hero-project{backdrop-filter:none;-webkit-backdrop-filter:none}}
