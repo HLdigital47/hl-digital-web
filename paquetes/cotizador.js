@@ -4,30 +4,62 @@
   const R = window.HL_RATES;
   const money = n => '$' + n.toLocaleString('en-US');
   const initialState = () => ({mode:'custom', package:null, web:'none', gbp:false, seo:false, extras:[], monthly:'none'});
+  const rate = path => path.split('.').reduce((value,key)=>value[key],R);
+  function selectedServices(s) {
+    return [...(s.web!=='none'?[s.web]:[]),...(s.gbp?['gbp']:[]),...(s.seo?['audit']:[])];
+  }
+  function normalizedExtras(s) {
+    return [...new Set(s.extras)].filter(id=>R.extras[id] && !(id==='logo' && s.extras.includes('identity')));
+  }
+  function individualLines(s) {
+    return selectedServices(s).map(id=>({...rate(R.comparison.services[id].rate),id})).concat(normalizedExtras(s).map(id=>({...R.extras[id],id})));
+  }
+  function packageLines(id,s) {
+    const p=R.packages[id], coverage=R.comparison.packages[id];
+    const lines=[{id,name:p.name,price:p.price,detail:p.included.join(' · ')}];
+    if(s.seo&&!coverage.equivalentServices.includes('audit'))lines.push({...R.seo,id:'audit',name:R.seo.name+' (extra)'});
+    normalizedExtras(s).filter(extra=>!R.comparison.includedExtras[id].includes(extra)).forEach(extra=>lines.push({...R.extras[extra],id:extra,name:R.extras[extra].name+' (extra)'}));
+    return lines;
+  }
+  function recommendation(s, individualTotal) {
+    if(s.mode!=='custom')return null;
+    const selected=selectedServices(s);
+    // A package must cover the selected website and at least two selected core services.
+    // Unverified scope, a different website type, and new mandatory monthly fees exclude it.
+    const candidates=Object.entries(R.packages).flatMap(([id,p])=>{
+      const c=R.comparison.packages[id];
+      if(!selected.length || (s.web!=='none'&&p.web!==s.web))return [];
+      if(selected.some(service=>c.requiresConfirmation.includes(service)))return [];
+      const covered=selected.filter(service=>c.equivalentServices.includes(service));
+      if(covered.length<2)return [];
+      if(selected.some(service=>!c.equivalentServices.includes(service)&&service!=='audit'))return [];
+      if(p.monthly && p.monthly!==s.monthly)return [];
+      const lines=packageLines(id,s),total=lines.reduce((sum,line)=>sum+line.price,0);
+      if(total>=individualTotal)return [];
+      const requestedCapabilities=new Set(selected.flatMap(service=>R.comparison.services[service].capabilities));
+      const additional=c.capabilities.filter(cap=>!requestedCapabilities.has(cap)).map(cap=>R.comparison.capabilityLabels[cap]).filter(Boolean);
+      return [{id,name:p.name,base:p.price,lines,total,individualTotal,saving:individualTotal-total,monthly:R.monthly[p.monthly||s.monthly],additional}];
+    });
+    return candidates.sort((a,b)=>a.total-b.total||a.monthly.price-b.monthly.price)[0]||null;
+  }
   function calculate(s) {
-    const pack = s.mode === 'package' ? R.packages[s.package] : null;
-    const lines = [];
-    if (pack) lines.push({name:pack.name,price:pack.price,detail:pack.included.join(' · ')});
-    else {
-      if (s.web !== 'none') lines.push(R.web[s.web]);
-      if (s.gbp) lines.push(R.gbp);
-      if (s.seo) lines.push(R.seo);
-    }
-    if (pack && s.seo && !pack.seo) lines.push({...R.seo,name:R.seo.name+" (extra)"});
-    s.extras.forEach(id => {if (id === 'logo' && s.extras.includes('identity')) return; if (id === 'automation' && s.package === 'crecimiento' && pack) return; lines.push(R.extras[id]);});
-    const monthly = R.monthly[pack?.monthly || s.monthly];
-    const hasWeb = pack ? pack.web !== 'none' : s.web !== 'none';
-    const hasGbp = pack ? pack.gbp : s.gbp;
-    const warnings = [];
-    if (monthly.price && (!hasWeb || !hasGbp)) warnings.push('Si ya tienes web o perfil de Google, revisaremos su acceso y estado. Las tareas de cada canal solo se aplican cuando exista y sea elegible. Si falta alguno, solicita una propuesta personalizada; su creación no está incluida en la mensualidad.');
-    const matching = !pack && s.gbp ? (s.web==='landing'&&!s.seo?'impulso':s.web==='web'?(s.seo?'crecimiento':'profesional'):null) : null;
-    return {lines,initial:lines.reduce((sum,item)=>sum+item.price,0),monthly,warnings,pack,matching,valid:lines.length>0||monthly.price>0};
+    const pack=s.mode==='package'?R.packages[s.package]:null;
+    const lines=pack?packageLines(s.package,s):individualLines(s);
+    const initial=lines.reduce((sum,item)=>sum+item.price,0);
+    const monthly=R.monthly[pack?.monthly||s.monthly];
+    const hasWeb=pack?pack.web!=='none':s.web!=='none',hasGbp=pack?pack.gbp:s.gbp;
+    const warnings=[];
+    if(monthly.price&&(!hasWeb||!hasGbp))warnings.push('Si ya tienes web o perfil de Google, revisaremos su acceso y estado. Las tareas de cada canal solo se aplican cuando exista y sea elegible. Si falta alguno, solicita una propuesta personalizada; su creación no está incluida en la mensualidad.');
+    return {lines,initial,monthly,warnings,pack,recommendation:recommendation(s,initial),valid:lines.length>0||monthly.price>0};
+  }
+  function quoteAmounts(result) {
+    return {initial:money(result.initial),monthly:money(result.monthly.price)+'/mes'};
   }
   function buildMessage(state, details) {
-    const r=calculate(state), v=name=>String(details[name]||'').trim();
-    return ['Hola, HL Digital.','Me gustaría solicitar una propuesta para mi negocio.',`Negocio: ${v('business')}`,`Contacto: ${v('contact')}`,`Correo: ${v('email')}`,`Teléfono: ${v('phone')}`,`Ciudad y estado: ${v('city')}`,r.pack?`Paquete: ${r.pack.name}`:'Plan personalizado','Servicios seleccionados:',...r.lines.map(item=>`${item.name}: ${item.from?'Desde ':''}${money(item.price)}${item.detail?' ('+item.detail+')':''}`),`Inversión inicial estimada: ${money(r.initial)} USD`,`Mantenimiento mensual: ${r.monthly.name} — ${money(r.monthly.price)}/mes`,...r.warnings,'Gastos de terceros no incluidos. Alcance sujeto a confirmación.',v('comment')?`Comentarios: ${v('comment')}`:'','Quisiera recibir información sobre los siguientes pasos.'].filter(Boolean).join('\n\n');
+    const r=calculate(state), amounts=quoteAmounts(r), v=name=>String(details[name]||'').trim();
+    return ['Hola, HL Digital.','Me gustaría solicitar una propuesta para mi negocio.',`Negocio: ${v('business')}`,`Contacto: ${v('contact')}`,`Correo: ${v('email')}`,`Teléfono: ${v('phone')}`,`Ciudad y estado: ${v('city')}`,r.pack?`Paquete: ${r.pack.name}`:'Plan personalizado','Servicios seleccionados:',...r.lines.map(item=>`${item.name}: ${item.from?'Desde ':''}${money(item.price)}${item.detail?' ('+item.detail+')':''}`),`Inversión inicial estimada: ${amounts.initial} USD`,`Mantenimiento mensual: ${r.monthly.name} — ${amounts.monthly}`,...r.warnings,'Gastos de terceros no incluidos. Alcance sujeto a confirmación.',v('comment')?`Comentarios: ${v('comment')}`:'','Quisiera recibir información sobre los siguientes pasos.'].filter(Boolean).join('\n\n');
   }
-  window.HLQuote = {calculate,initialState,buildMessage};
+  window.HLQuote = {calculate,initialState,buildMessage,quoteAmounts};
   if (typeof document === 'undefined') return;
   const form = document.querySelector('#quote-form');
   if (!form) return;
@@ -59,7 +91,7 @@
       const selected=pack&&(name==='web'?input.value===pack.web:input.value==='yes'&&pack[name]);
       amount.textContent=selected?'Incluido en el paquete':money(name==='web'?R.web[input.value].price:input.value==='yes'?R[name].price:0);
     }));
-    form.querySelectorAll('input[name=extras]').forEach(i=>{i.checked=state.extras.includes(i.value);i.disabled=!!pack&&state.package==='crecimiento'&&i.value==='automation';
+    form.querySelectorAll('input[name=extras]').forEach(i=>{i.checked=state.extras.includes(i.value);i.disabled=!!pack&&R.comparison.includedExtras[state.package].includes(i.value);
       const rate=R.extras[i.value];i.closest('label').querySelector('strong').textContent=i.disabled?'Incluido en el paquete':(rate.from?'Desde ':'')+money(rate.price)+(rate.external?' + proveedor':'');});
     form.querySelectorAll('input[name=monthly]').forEach(i=>{i.checked=i.value===(pack?.monthly||state.monthly);i.disabled=!!pack?.monthly;});
     let result=calculate(state);
@@ -67,9 +99,19 @@
     const lines=el('quote-lines');lines.replaceChildren();
     if (!result.lines.length) {const p=document.createElement('p');p.className='helper';p.textContent='Tu selección aparecerá aquí.';lines.append(p);}
     result.lines.forEach(item=>{const row=document.createElement('div');row.className='summary-line';const name=document.createElement('span');name.textContent=item.name;const price=document.createElement('strong');price.textContent=(item.from?'Desde ':'')+money(item.price);row.append(name,price);if(item.detail){const detail=document.createElement('small');detail.textContent=item.detail;row.append(detail);}lines.append(row);});
-    el('initial-total').textContent=money(result.initial);el('monthly-total').textContent=money(result.monthly.price)+'/mes';el('monthly-label').textContent=result.monthly.name;
+    const amounts=quoteAmounts(result);el('initial-total').textContent=amounts.initial;el('monthly-total').textContent=amounts.monthly;el('monthly-label').textContent=result.monthly.name;
     el('monthly-warning').hidden=!result.warnings.length;el('monthly-warning').textContent=result.warnings.join(' ');
-    el('match-note').textContent=result.matching?`También puedes revisar ${R.packages[result.matching].name} (${money(R.packages[result.matching].price)}). Su alcance es distinto; el cotizador mantiene tus precios individuales hasta que elijas el paquete.`:result.pack?'El precio del paquete se mantiene. Los conceptos adicionales se suman por separado.':'';
+    const offer=result.recommendation, notice=el('match-note');notice.replaceChildren();
+    if(offer){
+      const heading=document.createElement('strong');heading.textContent='Mejor valor: '+offer.name;notice.append(heading);
+      const comparison=document.createElement('p');comparison.textContent=`Tu selección individual: ${money(offer.individualTotal)}. Paquete: ${money(offer.base)}${offer.total!==offer.base?' + extras '+money(offer.total-offer.base):''}. Total alternativo: ${money(offer.total)}. Diferencia inicial: ${money(offer.saving)}.`;notice.append(comparison);
+      const extras=offer.lines.slice(1);if(extras.length){const detail=document.createElement('p');detail.textContent='Extras: '+extras.map(item=>item.name+' '+money(item.price)).join(' · ');notice.append(detail);}
+      if(offer.additional.length){const added=document.createElement('p');added.textContent='El paquete también incorpora: '+offer.additional.join(', ')+'. Son prestaciones adicionales; no significa que todas sean necesarias para tu proyecto.';notice.append(added);}
+      const monthly=document.createElement('p');monthly.textContent='Mantenimiento por separado: '+money(offer.monthly.price)+'/mes. Tu selección y total actuales se conservan hasta que aceptes la recomendación.';notice.append(monthly);
+      const button=document.createElement('button');button.type='button';button.className='configure-package';button.textContent='Elegir esta opción por '+money(offer.total);button.addEventListener('click',()=>{state={...state,mode:'package',package:offer.id,web:R.packages[offer.id].web,gbp:true,seo:state.seo||R.packages[offer.id].seo};render();});notice.append(button);
+    }else if(result.pack){notice.textContent='El precio del paquete se mantiene. Los extras se detallan y se suman por separado.';}
+    else if(state.web==='landing'&&state.gbp){notice.textContent=R.comparison.packages.impulso.note;}
+    if(state.extras.includes('automation')&&state.package==='crecimiento'&&result.pack){const note=document.createElement('p');note.textContent=R.comparison.automationNote;notice.append(note);}
     el('proposal-button').disabled=!result.valid;el('empty-note').hidden=result.valid;
     el('quote-status').textContent=`Inversión inicial ${money(result.initial)}. Mantenimiento ${money(result.monthly.price)} al mes.`;
   }

@@ -1,4 +1,4 @@
-/* Fuente única de tarifas comerciales (USD). */
+/* Fuente única de tarifas y equivalencias comerciales (USD). */
 window.HL_RATES = {
   "packages": {
     "impulso": {
@@ -119,5 +119,120 @@ window.HL_RATES = {
   "individual": {
     "additionalPage": 129,
     "analytics": 79
+  },
+  "comparison": {
+    "services": {
+      "landing": {
+        "label": "Landing Page Profesional",
+        "rate": "web.landing",
+        "capabilities": [
+          "landing",
+          "responsive",
+          "contact",
+          "basicSeo",
+          "form"
+        ]
+      },
+      "web": {
+        "label": "Página Web Profesional",
+        "rate": "web.web",
+        "capabilities": [
+          "web",
+          "responsive",
+          "contact",
+          "technicalSeo",
+          "form",
+          "analytics",
+          "searchTools"
+        ]
+      },
+      "gbp": {
+        "label": "Google Business Profile",
+        "rate": "gbp",
+        "capabilities": [
+          "gbp"
+        ]
+      },
+      "audit": {
+        "label": "Auditoría SEO local",
+        "rate": "seo",
+        "capabilities": [
+          "audit"
+        ]
+      }
+    },
+    "packages": {
+      "impulso": {
+        "equivalentServices": [
+          "gbp"
+        ],
+        "requiresConfirmation": [
+          "landing"
+        ],
+        "capabilities": [
+          "landing",
+          "responsive",
+          "contact",
+          "basicSeo",
+          "searchTools",
+          "gbp"
+        ],
+        "note": "El paquete Impulso no detalla un formulario en su alcance aprobado. Confirma ese alcance antes de compararlo con la landing individual, que sí lo incluye."
+      },
+      "profesional": {
+        "equivalentServices": [
+          "web",
+          "gbp"
+        ],
+        "requiresConfirmation": [],
+        "capabilities": [
+          "web",
+          "responsive",
+          "contact",
+          "technicalSeo",
+          "form",
+          "analytics",
+          "searchTools",
+          "gbp",
+          "initialLocalSeo"
+        ]
+      },
+      "crecimiento": {
+        "equivalentServices": [
+          "web",
+          "gbp",
+          "audit"
+        ],
+        "requiresConfirmation": [],
+        "capabilities": [
+          "web",
+          "responsive",
+          "contact",
+          "technicalSeo",
+          "form",
+          "analytics",
+          "searchTools",
+          "gbp",
+          "initialLocalSeo",
+          "audit",
+          "serviceContent",
+          "emailNotifications",
+          "reviewQr"
+        ]
+      }
+    },
+    "capabilityLabels": {
+      "searchTools": "Configuración de buscadores",
+      "initialLocalSeo": "SEO local inicial",
+      "serviceContent": "Optimización de contenido de servicios",
+      "emailNotifications": "Notificaciones del formulario por correo",
+      "reviewQr": "Código QR para reseñas"
+    },
+    "includedExtras": {
+      "impulso": [],
+      "profesional": [],
+      "crecimiento": []
+    },
+    "automationNote": "Las notificaciones del formulario incluidas en Crecimiento Local no equivalen por sí solas a una automatización personalizada. Esta última se cotiza como extra con su propio alcance."
   }
 };
