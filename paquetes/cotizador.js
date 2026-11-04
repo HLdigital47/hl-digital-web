@@ -134,7 +134,7 @@
     event.preventDefault();if(!form.reportValidity())return;
     const r=calculate(state);if(!r.valid)return;
     const data=new FormData(form),v=name=>String(data.get(name)||'').trim();
-    if(['business','contact','city'].some(name=>!v(name))){alert('Completa el negocio, contacto y ciudad con información válida.');return;}
+    if(['business','contact','city'].some(name=>!v(name))){alert('Completa el nombre del negocio, el nombre de contacto y la ciudad con información válida.');return;}
     const text=buildMessage(state,Object.fromEntries(data));
     window.open('https://wa.me/13465412861?text='+encodeURIComponent(text),'_blank','noopener,noreferrer');
   });

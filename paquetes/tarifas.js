@@ -84,7 +84,7 @@ window.HL_RATES = {
       "price": 69
     },
     "automation": {
-      "name": "Automatización sencilla de formulario",
+      "name": "Automatización sencilla de un formulario",
       "price": 99
     },
     "catalog": {

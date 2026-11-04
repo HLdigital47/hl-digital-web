@@ -45,7 +45,7 @@
     // Google Apps Script doesn't permit reading browser cross-origin responses.
     // This confirms transmission, not that Google Sheets saved it.
     await fetch(cfg.formEndpoint,{method:'POST',mode:'no-cors',body:data,redirect:'follow'});
-    status.textContent='Su solicitud se envió exitosamente. Nos pondremos en contacto contigo. Si necesitas ayuda inmediata, utiliza el botón de WhatsApp o llámanos.';
+    status.textContent='Tu solicitud se envió correctamente. Nos pondremos en contacto contigo. Si necesitas ayuda inmediata, utiliza el botón de WhatsApp o llámanos.';
     status.className='form-status is-sent';
     document.dispatchEvent(new CustomEvent('hl:form-submitted'));
     form.reset();selected.clear();persist();

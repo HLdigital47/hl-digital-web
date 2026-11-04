@@ -53,12 +53,12 @@
 <fieldset><legend>¿Cómo quieres comenzar?</legend><div class="mode-options"><label class="choice"><input type="radio" name="mode" value="custom" checked><span>Personalizar servicios<small>Elige cada servicio por separado.</small></span></label><label class="choice"><input type="radio" name="mode" value="package"><span>Elegir un paquete<small>Conserva su precio y alcance aprobados.</small></span></label></div><div id="package-choices" hidden></div><p id="package-note" class="helper" hidden>Los servicios incluidos conservan el alcance del paquete y no se cobran otra vez. Puedes añadir extras. Para quitar un servicio, cambia a «Personalizar servicios».</p></fieldset>
 <fieldset><legend>1. ¿Qué tipo de página web necesita tu negocio?</legend><div id="web-choices"></div></fieldset>
 <fieldset><legend>2. ¿Necesitas mejorar tu presencia en Google Maps?</legend><div id="gbp-choices"></div><p class="helper">Incluye categorías y servicios, descripción empresarial, datos de contacto, áreas de servicio cuando corresponda y asistencia con la verificación. El negocio debe ser elegible y la verificación depende de Google.</p></fieldset>
-<fieldset><legend>3. ¿Quieres mejorar la visibilidad de tu negocio en Google?</legend><div id="seo-choices"></div><p class="helper">La auditoría revisa presencia local, SEO básico de la web si existe, problemas técnicos principales y recomendaciones priorizadas. Es una revisión inicial; el trabajo mensual se contrata por separado.</p></fieldset>
+<fieldset><legend>3. ¿Quieres mejorar la visibilidad de tu negocio en Google?</legend><div id="seo-choices"></div><p class="helper">La auditoría revisa la presencia local y, si ya tienes una web, su SEO básico. También identifica los principales problemas técnicos y ofrece recomendaciones priorizadas. Es una revisión inicial; el trabajo mensual se contrata por separado.</p></fieldset>
 <fieldset><legend>4. ¿Qué otros servicios necesitas?</legend><div id="extra-choices"></div><p class="helper">La identidad visual básica incluye el logotipo: elige una sola opción. La automatización añade un flujo de recepción y notificaciones al formulario; no duplica el formulario básico de la web. El catálogo es un entregable aparte.</p><p class="helper">Los precios «Desde» son orientativos y requieren confirmar el alcance. El correo profesional no incluye el costo del proveedor.</p></fieldset>
-<fieldset><legend>5. ¿Quieres que HL Digital se encargue del mantenimiento y las mejoras?</legend><div id="monthly-choices"></div><p class="helper">Consulta el alcance completo en <a href="#mantenimiento">los planes de mantenimiento</a>. El tiempo es total por mes, no se acumula y los servicios adicionales se cotizan por separado.</p><p id="monthly-warning" class="compatibility" hidden></p></fieldset>
+<fieldset><legend>5. ¿Quieres que HL Digital se encargue del mantenimiento y las mejoras?</legend><div id="monthly-choices"></div><p class="helper">Consulta el alcance completo en <a href="#mantenimiento">los planes de mantenimiento</a>. El tiempo indicado corresponde al total mensual, no es acumulable y los servicios adicionales se cotizan por separado.</p><p id="monthly-warning" class="compatibility" hidden></p></fieldset>
 <fieldset class="client-fields"><legend>Cuéntanos sobre tu proyecto</legend><p class="helper">Estos datos solo se preparan en tu navegador para abrir tu solicitud en WhatsApp. No se guardan en esta página. Revisa el mensaje y envíalo desde WhatsApp para que podamos responderte.</p><div class="fields-grid"><label>Nombre del negocio<input name="business" autocomplete="organization" required maxlength="120"></label><label>Nombre de contacto<input name="contact" autocomplete="name" required maxlength="100"></label><label>Correo electrónico<input type="email" name="email" autocomplete="email" required maxlength="150"></label><label>Teléfono o WhatsApp<input type="tel" name="phone" autocomplete="tel" required minlength="7" maxlength="30" pattern="[+0-9() .-]{7,30}"></label><label class="full-field">Ciudad y estado<input name="city" autocomplete="address-level2" required maxlength="120"></label><label class="full-field">Comentario sobre el proyecto (opcional)<textarea name="comment" rows="3" maxlength="800"></textarea></label></div></fieldset>
 </div>
-<aside class="quote-summary" aria-labelledby="summary-title"><p class="eyebrow">RESUMEN DE TU SELECCIÓN</p><h3 id="summary-title">Tu plan digital</h3><div id="quote-lines"></div><div class="quote-total"><span>INVERSIÓN INICIAL ESTIMADA</span><strong id="initial-total">$0</strong><small>USD · pago inicial</small></div><div class="quote-recurring"><span>MANTENIMIENTO MENSUAL</span><strong id="monthly-total">$0/mes</strong><small id="monthly-label">Sin mantenimiento</small></div><p id="match-note" class="helper"></p><p class="helper">Dominio, renovaciones y gastos de terceros no incluidos. Confirmaremos el alcance en la propuesta.</p><p id="quote-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p><button type="submit" class="button" id="proposal-button" disabled>Solicitar mi propuesta</button><p class="helper" id="empty-note">Selecciona al menos un servicio para continuar.</p><button type="reset" class="reset-quote">Reiniciar configurador</button><p class="helper">Se abrirá WhatsApp con tu resumen. Tú decides cuándo enviar el mensaje.</p></aside>
+<aside class="quote-summary" aria-labelledby="summary-title"><p class="eyebrow">RESUMEN DE TU SELECCIÓN</p><h3 id="summary-title">Tu plan digital</h3><div id="quote-lines"></div><div class="quote-total"><span>INVERSIÓN INICIAL ESTIMADA</span><strong id="initial-total">$0</strong><small>USD · pago inicial</small></div><div class="quote-recurring"><span>MANTENIMIENTO MENSUAL</span><strong id="monthly-total">$0/mes</strong><small id="monthly-label">Sin mantenimiento</small></div><p id="match-note" class="helper"></p><p class="helper">El dominio, las renovaciones y los gastos de terceros no están incluidos. Confirmaremos el alcance en la propuesta.</p><p id="quote-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p><button type="submit" class="button" id="proposal-button" disabled>Solicitar mi propuesta</button><p class="helper" id="empty-note">Selecciona al menos un servicio para continuar.</p><button type="reset" class="reset-quote">Reiniciar configurador</button><p class="helper">Se abrirá WhatsApp con tu resumen. Tú decides cuándo enviar el mensaje.</p></aside>
 </form></div></section>
 
 <section class="section wrap" id="paquetes">
@@ -267,7 +267,7 @@
 <p class="plan-price"><b data-rate="monthly.impulso.price">$79</b><span>/mes</span>
 </p>
 <ul>
-<li>Revisión de funcionamiento web.</li>
+<li>Revisión del funcionamiento de la web.</li>
 <li>Hasta 30 minutos mensuales de trabajo.</li>
 <li>Actualización básica de Google Business.</li>
 </ul>
@@ -277,7 +277,7 @@
 <p class="plan-price"><b data-rate="monthly.profesional.price">$129</b><span>/mes</span>
 </p>
 <ul>
-<li>Revisión de funcionamiento web.</li>
+<li>Revisión del funcionamiento de la web.</li>
 <li>Hasta 60 minutos mensuales de trabajo total.</li>
 <li>Dos publicaciones en Google Business.</li>
 <li>Resumen mensual de rendimiento.</li>
@@ -296,7 +296,7 @@
 </ul>
 </article>
 </div>
-<p class="hours-note">El tiempo indicado es el total mensual del plan. Las horas no se acumulan y los servicios adicionales se cotizan por separado.</p>
+<p class="hours-note">El tiempo indicado corresponde al total mensual del plan. Las horas no se acumulan y los servicios adicionales se cotizan por separado.</p>
 </section>
 <section class="section wrap services" id="adicionales">
 <div class="section-heading">
@@ -336,7 +336,7 @@
 <dd>Desde <span data-rate="extras.whatsapp.price">$69</span></dd>
 </div>
 <div>
-<dt>Automatización sencilla de formularios</dt>
+<dt>Automatización sencilla de un formulario</dt>
 <dd>Desde <span data-rate="extras.automation.price">$99</span></dd>
 </div>
 <div>
@@ -344,7 +344,7 @@
 <dd>Desde <span data-rate="extras.email.price">$49</span> + costos externos</dd>
 </div>
 <div>
-<dt>Página web adicional de servicios</dt>
+<dt>Página adicional de servicios</dt>
 <dd>Desde <span data-rate="individual.additionalPage">$129</span></dd>
 </div>
 <div>
