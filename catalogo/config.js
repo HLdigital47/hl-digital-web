@@ -432,26 +432,59 @@ window.CATALOG_CONFIG = {
       "group": "redes-sociales",
       "name": "Administración de redes sociales",
       "eyebrow": "Contenido, programación y publicación",
-      "description": "Con las fotos y videos de tus trabajos, preparo, programo y publico el contenido en las redes que acordemos.",
+      "description": "Preparo, programo y publico contenido con las fotos y videos de tus trabajos para Facebook, Instagram y Google Business Profile. También respondo las reseñas en Google.",
       "image": "assets/planner.svg",
       "benefit": "Tú enfócate en tu trabajo. Yo me encargo de que tus redes muestren lo que haces.",
       "variants": [
         {
-          "name": "Propuesta de administración mensual",
-          "price": null,
-          "cycle": "quote",
-          "scope": "El alcance se define según las redes, los formatos y la frecuencia.",
+          "name": "8 publicaciones + 2 videos",
+          "price": 299,
+          "cycle": "monthly",
+          "scope": "8 publicaciones y 2 videos cortos al mes en total, adaptados a los canales acordados.",
           "includes": [
-            "Ideas y calendario de contenido",
-            "Textos para publicaciones, carruseles o guiones cortos según el alcance",
-            "Programación y publicación en las redes acordadas"
+            "Calendario, textos y diseño de publicaciones",
+            "Edición de videos cortos con el material que me compartas",
+            "Programación y publicación para Facebook, Instagram y Google Business Profile",
+            "Respuesta a reseñas en Google Business Profile"
           ],
-          "exclusions": "La grabación presencial, la atención de mensajes y los anuncios se cotizan aparte si los necesitas."
+          "exclusions": "La grabación presencial, la atención de mensajes privados y los anuncios se cotizan por separado."
         }
       ],
       "materials": "Redes actuales, público, objetivo y fotos o videos propios disponibles.",
       "delivery": "Me encargo del calendario y de publicar las piezas con la frecuencia acordada.",
-      "example": null
+      "example": null,
+      "builder": {
+        "posts": [
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "videos": [
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "postExtra": 20,
+        "videoExtra": 35
+      }
     }
   ]
 };
+// Keep the same plans and prices in the calculator, checkout and proposal builder.
+{
+  const social = window.CATALOG_CONFIG.services.find(service => service.id === 'contenido-redes');
+  const {posts, videos, postExtra, videoExtra} = social.builder;
+  const [base] = social.variants;
+  social.variants = posts.flatMap(postCount => videos.map(videoCount => ({
+    ...base,
+    posts: postCount,
+    videos: videoCount,
+    name: `${postCount} publicaciones + ${videoCount} videos`,
+    scope: `${postCount} publicaciones y ${videoCount} videos cortos al mes en total, adaptados a los canales acordados.`,
+    price: base.price + (postCount - posts[0]) * postExtra + (videoCount - videos[0]) * videoExtra
+  })));
+}

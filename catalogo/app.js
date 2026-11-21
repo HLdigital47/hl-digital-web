@@ -19,7 +19,7 @@
   $('service-groups').innerHTML=cfg.groups.filter(g=>g.id===state.area).map(g=>{
    const list=cfg.services.filter(s=>s.group===g.id&&norm([s.name,s.description,...s.variants.flatMap(v=>v.includes)].join(' ')).includes(norm(state.query)));
    matches+=list.length;
-   const cards=list.map((s,i)=>{const v=base(s);return `<article class="plan-card tone-${i%3}" data-service-card="${esc(s.id)}"><div class="plan-image"><img src="${esc(s.image)}" alt="" width="600" height="400" loading="lazy" decoding="async"></div><div class="plan-body"><span class="plan-eyebrow">${esc(s.eyebrow)}</span><h3>${esc(s.name)}</h3><p class="plan-description">${esc(s.description)}</p><div class="plan-price">${v.price===null?'<strong>A cotizar</strong>':`<span>Desde</span><strong>${money(v.price)}</strong><small>/ ${cycle(v)}</small>`}</div><p class="plan-scope">${esc(v.scope)}</p><ul class="plan-includes">${v.includes.slice(0,3).map(t=>`<li>${esc(t)}</li>`).join('')}</ul><div class="plan-actions"><button class="button primary" data-contract="${esc(s.id)}" aria-label="${v.price===null?'Solicitar propuesta':v.cycle==='monthly'?'Contratar Plan':'Adquirir Servicio'}: ${esc(s.name)}">${v.price===null?'Solicitar propuesta':v.cycle==='monthly'?'Contratar Plan':'Adquirir Servicio'}</button><button class="text-button" data-detail="${esc(s.id)}" aria-label="Ver alcance de ${esc(s.name)}">Ver alcance y opciones</button><button class="text-button" data-proposal-add="${esc(s.id)}">Añadir a mi propuesta</button></div></div></article>`;}).join('');
+   const cards=list.map((s,i)=>{const v=base(s);return `<article class="plan-card tone-${i%3}" data-service-card="${esc(s.id)}"><div class="plan-image"><img src="${esc(s.image)}" alt="" width="600" height="400" loading="lazy" decoding="async"></div><div class="plan-body"><span class="plan-eyebrow">${esc(s.eyebrow)}</span><h3>${esc(s.name)}</h3><p class="plan-description">${esc(s.description)}</p><div class="plan-price">${v.price===null?'<strong>A cotizar</strong>':`<span>Desde</span><strong>${money(v.price)}</strong><small>/ ${cycle(v)}</small>`}</div><p class="plan-scope">${esc(v.scope)}</p><ul class="plan-includes">${v.includes.slice(0,3).map(t=>`<li>${esc(t)}</li>`).join('')}</ul><div class="plan-actions"><button class="button primary" data-contract="${esc(s.id)}" aria-label="${v.price===null?'Solicitar propuesta':v.cycle==='monthly'?'Contratar Plan':'Adquirir Servicio'}: ${esc(s.name)}">${v.price===null?'Solicitar propuesta':v.cycle==='monthly'?'Contratar Plan':'Adquirir Servicio'}</button><button class="text-button" data-detail="${esc(s.id)}" aria-label="Ver alcance de ${esc(s.name)}">${s.builder?'Personalizar publicaciones y videos':'Ver alcance y opciones'}</button><button class="text-button" data-proposal-add="${esc(s.id)}">Añadir a mi propuesta</button></div></div></article>`;}).join('');
    return `${list.length?`<section class="service-area" id="${esc(g.id)}" aria-labelledby="title-${g.id}"><div class="area-heading"><h2 id="title-${g.id}">${esc(g.name)}</h2><p>${esc(g.description)}</p></div><div class="plan-grid">${cards}</div></section>`:''}`;
   }).join('');
   $('search-status').textContent=state.query?`${matches} ${matches===1?'servicio coincide':'servicios coinciden'} en esta categoría.`:`${matches} ${matches===1?'servicio disponible':'servicios disponibles'} en ${cfg.groups.find(g=>g.id===state.area).name}.`;
@@ -43,11 +43,39 @@
  function serviceFacts({materials,delivery,example}){
   return `${materials?`<dl class="service-facts"><dt>Qué necesito de ti</dt><dd>${esc(materials)}</dd><dt>Qué recibes</dt><dd>${esc(delivery)}</dd></dl>`:''}${projectExample(example)}`;
  }
+ function socialBuilder(s){
+  const {posts,videos,postExtra,videoExtra}=s.builder;
+  const options=values=>values.map(n=>`<option value="${n}">${n}</option>`).join('');
+  return `<section class="social-builder" aria-labelledby="social-builder-title">
+   <h3 id="social-builder-title">Arma tu plan mensual</h3>
+   <p>Desde ${priceText(base(s))}. El plan base incluye 8 publicaciones y 2 videos cortos al mes.</p>
+   <div class="advisor-fields">
+    <label>Publicaciones al mes<select id="social-posts">${options(posts)}</select></label>
+    <label>Videos al mes<select id="social-videos">${options(videos)}</select></label>
+   </div>
+   <p>Publicación adicional: ${money(postExtra)} · Video adicional: ${money(videoExtra)}.</p>
+   <ul class="include-list">${base(s).includes.map(text=>`<li>${esc(text)}</li>`).join('')}</ul>
+   <p class="scope-note">${esc(base(s).exclusions)}</p>
+   <p class="social-total" id="social-total" role="status">${priceText(base(s))}</p>
+   <div class="advisor-actions">
+    <button type="button" class="button primary" data-contract="${s.id}" data-variant="0">Solicitar este plan</button>
+    <button type="button" class="button outline" data-proposal-add="${s.id}" data-variant="0">Añadir a mi propuesta</button>
+   </div>
+  </section>`;
+ }
  function showDetail(id){
   const s=services.get(id);if(!s)return;state.detail=id;
-  $('service-detail').innerHTML=`<div class="detail-art"><img src="${esc(s.image)}" alt="" width="600" height="400"></div><div class="detail-copy"><span class="eyebrow">${esc(cfg.groups.find(g=>g.id===s.group).name)}</span><h2 id="service-title">${esc(s.name)}</h2><p class="detail-benefit">${esc(s.benefit)}</p><p>${esc(s.description)}</p>${serviceFacts(s)}<div class="variant-details">${s.variants.map((v,i)=>`<section><div class="variant-top"><h3>${esc(v.name)}</h3><strong>${priceText(v)}</strong></div><p class="variant-scope">${esc(v.scope)}</p><ul class="include-list">${v.includes.map(t=>`<li>${esc(t)}</li>`).join('')}</ul><p class="scope-note">${esc(v.exclusions)}</p>${projectExample(v.example)}<button class="button primary" data-contract="${esc(s.id)}" data-variant="${i}">${v.price===null?'Solicitar propuesta':v.cycle==='monthly'?'Contratar Plan':'Adquirir Servicio'}</button></section>`).join('')}</div></div>`;
+  $('service-detail').innerHTML=`<div class="detail-art"><img src="${esc(s.image)}" alt="" width="600" height="400"></div><div class="detail-copy"><span class="eyebrow">${esc(cfg.groups.find(g=>g.id===s.group).name)}</span><h2 id="service-title">${esc(s.name)}</h2><p class="detail-benefit">${esc(s.benefit)}</p><p>${esc(s.description)}</p>${serviceFacts(s)}${s.builder?socialBuilder(s):`<div class="variant-details">${s.variants.map((v,i)=>`<section><div class="variant-top"><h3>${esc(v.name)}</h3><strong>${priceText(v)}</strong></div><p class="variant-scope">${esc(v.scope)}</p><ul class="include-list">${v.includes.map(t=>`<li>${esc(t)}</li>`).join('')}</ul><p class="scope-note">${esc(v.exclusions)}</p>${projectExample(v.example)}<button class="button primary" data-contract="${esc(s.id)}" data-variant="${i}">${v.price===null?'Solicitar propuesta':v.cycle==='monthly'?'Contratar Plan':'Adquirir Servicio'}</button></section>`).join('')}</div>`}</div>`;
   const copy=$('service-detail').querySelector('.detail-copy');
-  if(s.id==='contenido-redes')copy.append($('social-samples').content.cloneNode(true));
+  if(s.builder){
+   const builder=copy.querySelector('.social-builder');
+   builder.addEventListener('change',()=>{
+    const index=s.variants.findIndex(plan=>plan.posts===Number($('social-posts').value)&&plan.videos===Number($('social-videos').value));
+    $('social-total').textContent=priceText(s.variants[index]);
+    all('[data-variant]',builder).forEach(button=>{button.dataset.variant=String(index);});
+   });
+   copy.append($('social-samples').content.cloneNode(true));
+  }
   copy.append($('service-help-template').content.cloneNode(true));
   const u=new URL(location.href);u.searchParams.set('servicio',s.id);history.replaceState(null,'',u);open('service-dialog');
  }
