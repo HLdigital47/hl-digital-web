@@ -50,11 +50,11 @@
     }));
     summary.hidden = selected.size === 0;
     if (summary.hidden) {
-      whatsapp.removeAttribute('href');
+      return;
       return;
     }
     lines.push('', ...charges.map(([label, value]) => `${label}: ${value}`));
-    whatsapp.href = `https://wa.me/${config.whatsapp}?text=${encodeURIComponent(lines.join('\n'))}`;
+    whatsapp.dataset.summary = lines.join('\n');
   }
 
   function render() {
@@ -95,6 +95,26 @@
       : 'Estos servicios ya están en tu propuesta.';
   }
 
+
+  whatsapp.addEventListener('click',()=>{
+    if(selected.size===0)return;
+    byId('proposal-request-details').textContent=whatsapp.dataset.summary||'';
+    byId('proposal-request-status').textContent='';
+    byId('proposal-request-dialog').showModal();
+  });
+  byId('proposal-request-form').addEventListener('submit',async event=>{
+    event.preventDefault();
+    const form=event.currentTarget;if(!form.reportValidity())return;
+    const fields=new FormData(form),button=form.querySelector('[type="submit"]');
+    const sendStatus=byId('proposal-request-status');
+    button.disabled=true;button.textContent='Enviando…';sendStatus.textContent='Transmitiendo tu solicitud…';
+    try{
+      await window.HL_CATALOG_SEND({name:fields.get('name'),business:fields.get('business'),contact:fields.get('email'),service:[...selected].map(([id,index])=>services.get(id).name+' · '+services.get(id).variants[index].name).join(', '),message:(whatsapp.dataset.summary||'')+'\n\nDetalles: '+String(fields.get('notes')||''),website:'',source:'catalogo-propuesta'});
+      sendStatus.textContent='Solicitud transmitida. Gracias por contactar a HL Digital; revisaremos los datos recibidos.';
+      form.reset();
+    }catch(err){sendStatus.textContent='No pudimos transmitir tu solicitud. Intenta de nuevo o escríbenos a support@hldigitalweb.com.';}
+    finally{button.disabled=false;button.textContent='Enviar solicitud';}
+  });
   byId('proposal-form').addEventListener('submit', event => {
     event.preventDefault();
     if (picker.value) add([picker.value]);
