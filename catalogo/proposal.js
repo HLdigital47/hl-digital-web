@@ -113,7 +113,14 @@
     const remove = event.target.closest('[data-proposal-remove]');
     if (combo) add(combinations[combo.dataset.combination]);
     if (card) {
-      add([card.dataset.proposalAdd]);
+      const id = card.dataset.proposalAdd;
+      add([id]);
+      if (card.hasAttribute('data-variant')) {
+        selected.set(id, Number(card.dataset.variant));
+        render();
+        status.textContent = 'Plan de redes actualizado en tu propuesta.';
+      }
+      card.closest('dialog[open]')?.close();
       byId('proposal-title').focus({preventScroll: true});
       byId('propuesta').scrollIntoView();
     }
