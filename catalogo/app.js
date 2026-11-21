@@ -118,7 +118,7 @@
  document.addEventListener('change',e=>{if(e.target.matches('[data-addon]')){e.target.checked?state.addons.add(e.target.dataset.addon):state.addons.delete(e.target.dataset.addon);updateSummary();}});
  $('plan-variant').addEventListener('change',e=>{state.variant=Number(e.target.value);renderContract();});
  $('search').addEventListener('input',e=>{state.query=e.target.value.trim();renderGroups();});
- $('clear-search').addEventListener('click',()=>{state.query='';$('search').value='';renderGroups();$('search').focus();});
+ $('clear-search').addEventListener('click',()=>{state.query='';$('search').value='';renderGroups();$('search').focus({preventScroll:true});});
  ['customer-name','customer-business','customer-email','customer-notes'].forEach(id=>$(id).addEventListener('input',updateMessage));
  $('message-toggle').addEventListener('click',()=>{const show=$('message-preview').hidden;$('message-preview').hidden=!show;$('message-toggle').setAttribute('aria-expanded',String(show));$('message-toggle').textContent=show?'Ocultar mi solicitud':'Revisar mi solicitud';});
  $('contract-form').addEventListener('submit',e=>{e.preventDefault();const msg=message();if(e.submitter?.value==='email'){location.href=`mailto:${cfg.email}?subject=${encodeURIComponent('Iniciar contratación · '+services.get(state.service).name)}&body=${encodeURIComponent(msg)}`;}else{window.open(`https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(msg)}`,'_blank','noopener,noreferrer');}});

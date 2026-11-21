@@ -287,3 +287,8 @@ html:has(.page-home) {
     height: 34px;
   }
 }
+
+.page-home .hero-copy > .hero-sara { margin-top: 1.15rem; font-weight: 700; }
+.page-home .hero-copy > p > a, .faq-list p > a, .requested-service-links a { text-decoration: underline; text-underline-offset: .18em; }
+.requested-service-links { display: flex; flex-wrap: wrap; gap: .75rem 1.5rem; padding-block: 1rem 1.75rem; }
+.desktop-nav { flex-wrap: wrap; }

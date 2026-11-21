@@ -98,7 +98,7 @@
   byId('proposal-form').addEventListener('submit', event => {
     event.preventDefault();
     if (picker.value) add([picker.value]);
-    if (!picker.disabled) picker.focus();
+    if (!picker.disabled) picker.focus({preventScroll: true});
   });
   items.addEventListener('change', event => {
     const id = event.target.dataset.proposalVariant;
@@ -122,12 +122,11 @@
       }
       card.closest('dialog[open]')?.close();
       byId('proposal-title').focus({preventScroll: true});
-      byId('propuesta').scrollIntoView();
     }
     if (remove && selected.delete(remove.dataset.proposalRemove)) {
       render();
       status.textContent = 'Servicio retirado de la propuesta.';
-      picker.focus();
+      picker.focus({preventScroll: true});
     }
   });
   byId('proposal-title').tabIndex = -1;
