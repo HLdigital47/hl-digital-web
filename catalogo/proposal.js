@@ -51,7 +51,6 @@
     summary.hidden = selected.size === 0;
     if (summary.hidden) {
       return;
-      return;
     }
     lines.push('', ...charges.map(([label, value]) => `${label}: ${value}`));
     whatsapp.dataset.summary = lines.join('\n');
