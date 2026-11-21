@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#e6d7bd"><meta name="description" content="Servicios digitales de HL Digital con precios base claros: presencia local, páginas web, automatización y soporte para pequeños negocios."><title>HL Digital · Catálogo de servicios</title><link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css"><script src="config.js" defer></script><script src="app.js" defer></script><script src="proposal.js" defer></script></head>
+<body><a class="skip" href="#servicios">Saltar a planes y precios</a>
+<header class="header"><div class="wrap header-inner"><a class="brand" href="/" aria-label="Volver al inicio de HL Digital"><img class="brand-logo" src="assets/hl-digital-logo.webp" alt="" width="44" height="44"><span>HL Digital</span></a><span class="header-context">CATÁLOGO DE SERVICIOS</span><a class="button compact primary" href="#servicios">Elegir mi servicio</a></div></header>
+<main id="inicio">
+<section class="hero catalog-cover wrap"><div class="hero-copy"><span class="eyebrow">EL CATÁLOGO DE HL DIGITAL</span><h1>Tu siguiente paso,<br><em>bien elegido.</em></h1><p>Explora los servicios por categoría y encuentra lo que necesita tu negocio.</p></div><div class="cover-summary"><span><span id="catalog-count"></span></span><strong>Precios claros.<br>Alcance definido.</strong><small>Atención en español · Precios en USD</small></div></section>
+<section class="advisor wrap" aria-labelledby="advisor-title">
+  <h2 id="advisor-title">¿Por dónde empiezo?</h2>
+  <form id="advisor-form">
+    <div class="advisor-fields">
+      <label>¿Ya tienes página web?<select required name="web"><option value="">Selecciona una opción</option><option value="yes">Sí</option><option value="no">No</option></select></label>
+      <label>¿Tu Perfil de Empresa en Google está activo?<select required name="google"><option value="">Selecciona una opción</option><option value="yes">Sí</option><option value="no">Todavía no</option><option value="unknown">No estoy seguro</option></select></label>
+      <label>¿Qué quieres resolver primero?<select required name="goal"><option value="">Selecciona una opción</option><option value="visibility">Que me encuentren</option><option value="quotes">Recibir cotizaciones</option><option value="followup">Dar seguimiento a las consultas</option><option value="social">Publicar contenido para redes</option></select></label>
+    </div>
+    <button type="submit" class="button primary">Ver mi recomendación</button>
+  </form>
+  <div class="advisor-result" id="advisor-result" aria-live="polite" hidden></div>
+</section>
+<section id="servicios" class="catalog wrap"><div class="section-heading"><div><h2>Servicios y precios</h2><p class="catalog-caption">Elige una categoría para explorar sus servicios.</p></div><label class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><input id="search" type="search" aria-label="Buscar en la categoría seleccionada" placeholder="Buscar en esta categoría…" autocomplete="off"></label></div><nav id="area-filters" class="area-filters" aria-label="Filtrar servicios por categoría"></nav><p id="search-status" class="search-status" role="status"></p><div id="service-groups"></div><div id="empty" class="empty" hidden><h3>No encontramos ese servicio.</h3><p>Prueba otra palabra dentro de esta categoría o elige otra categoría.</p><button id="clear-search" class="button outline">Limpiar búsqueda</button></div><p class="price-footnote">Precios en USD. Los importes “Desde” corresponden al plan base descrito. Puedes revisar variantes y complementos antes de continuar. Los servicios de terceros y los impuestos aplicables se detallan antes de confirmar.</p></section>
+<section id="propuesta" class="advisor wrap" aria-labelledby="proposal-title">
+  <h2 id="proposal-title">Arma tu propuesta</h2>
+  <p>Elige los servicios y planes que necesita tu negocio y solicítalos juntos por WhatsApp.</p>
+  <div class="proposal-combinations">
+    <button type="button" class="button outline" data-combination="google"><strong>Quiero empezar en Google</strong><span>Perfil de Empresa en Google + página web</span></button>
+    <button type="button" class="button outline" data-combination="contacto"><strong>Quiero organizar mis consultas</strong><span>WhatsApp Business + automatización</span></button>
+  </div>
+  <form id="proposal-form">
+    <label for="proposal-service">Añadir un servicio</label>
+    <div class="proposal-picker"><select id="proposal-service" required></select><button class="button primary" type="submit">Añadir</button></div>
+  </form>
+  <p id="proposal-status" role="status"></p>
+  <div id="proposal-items"></div>
+  <div id="proposal-summary" class="proposal-summary" hidden>
+    <dl id="proposal-totals"></dl>
+    <p>Los importes son estimados. Confirmamos alcance y precio antes de contratar.</p>
+    <a class="button primary" id="proposal-whatsapp" target="_blank" rel="noopener noreferrer">Solicitar propuesta por WhatsApp</a>
+  </div>
+</section>
+<template id="social-samples">
+ <section class="social-samples">
+  <h3>Muestras de contenido</h3>
+  <p>Ejemplos ilustrativos para un negocio de pintura residencial.</p>
+  <details><summary>Carrusel sobre pintura interior</summary><ol>
+   <li>¿Vas a pintar tu sala? Revisa esto antes de elegir el color.</li>
+   <li>Mira la muestra en la pared de día y de noche. La luz puede cambiar cómo se ve.</li>
+   <li>Si la pared tiene grietas o pintura suelta, prepara la superficie antes de pintar.</li>
+   <li>¿Quieres cotizar tu sala? Envíanos una foto y las medidas aproximadas.</li>
+  </ol></details>
+  <details><summary>Guion para un video de 20 segundos</summary>
+   <p><strong>0–5 s · Antes.</strong> «Así encontramos esta pared antes de pintar».</p>
+   <p><strong>5–14 s · Preparación.</strong> «Protegimos el piso, resanamos las marcas y lijamos antes de aplicar la pintura».</p>
+   <p><strong>14–20 s · Después.</strong> «¿Quieres renovar una habitación? Mándanos una foto del espacio».</p>
+  </details>
+  <details><summary>Calendario de una semana</summary><ul>
+   <li><strong>Lunes · Carrusel.</strong> Cómo elegir un color según la luz de la habitación.</li>
+   <li><strong>Miércoles · Video.</strong> Antes y después con fotos o video del mismo proyecto.</li>
+   <li><strong>Viernes · Historias.</strong> Preguntas sobre cotizaciones y un enlace de contacto.</li>
+  </ul></details>
+ </section>
+</template>
+<section class="bonuses wrap" id="bonos"><div class="section-heading"><div><span class="eyebrow">MÁS VALOR AL CONTRATAR</span><h2>Herramientas que acompañan<br>tu siguiente paso.</h2></div><p>Bonos para planes seleccionados.<br>Complementos opcionales para los demás.</p></div><div id="bonus-cards" class="bonus-grid"></div><p class="bonus-note">Se entregan con el servicio contratado. El calendario es una herramienta para que organices tu propio contenido.</p></section>
+
+
+<section class="closing contact-strip wrap"><div><h2>¿Te ayudamos a elegir?</h2><p>Cuéntanos qué necesita tu negocio.</p></div><a class="button outline" id="advice-link" href="#">Consultar por WhatsApp</a></section>
+</main><footer class="footer wrap"><a class="brand" href="#inicio"><img class="brand-logo" src="assets/hl-digital-logo.webp" alt="" width="44" height="44"><span>HL Digital</span></a><span>Presencia que conecta.</span><button id="privacy-open" class="text-button">Privacidad</button></footer>
+<dialog id="service-dialog" class="service-dialog" aria-labelledby="service-title"><div class="detail-toolbar"><span>ALCANCE Y OPCIONES</span><button class="icon-button" data-close="service-dialog" aria-label="Cerrar detalles"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg></button></div><div id="service-detail"></div></dialog>
+<dialog id="contract-dialog" class="contract-dialog" aria-labelledby="contract-title"><div class="contract-header"><div><span class="eyebrow">INICIAR CONTRATACIÓN</span><h2 id="contract-title">Tu próximo paso.</h2></div><button class="icon-button" data-close="contract-dialog" aria-label="Cerrar contratación"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg></button></div><form id="contract-form"><div class="contract-scroll"><div class="contract-step"><span class="step-label">01 / TU SERVICIO</span><h3 id="contract-service-name"></h3><label for="plan-variant">Elige tu plan</label><select id="plan-variant"></select><div class="contract-plan-price" id="contract-plan-price"></div><p class="contract-scope" id="contract-scope"></p><ul class="include-list" id="contract-includes"></ul><p class="scope-note" id="contract-exclusions"></p></div><div class="contract-step"><span class="step-label">02 / BONOS Y COMPLEMENTOS</span><div id="contract-bonuses"></div></div><div class="contract-step"><span class="step-label">03 / TU NEGOCIO</span><div class="field-grid"><label>Tu nombre<input id="customer-name" required maxlength="80" autocomplete="name" placeholder="Nombre y apellido"></label><label>Nombre del negocio<input id="customer-business" required maxlength="120" autocomplete="organization" placeholder="¿Cómo se llama tu negocio?"></label></div><label>Correo de contacto<input id="customer-email" type="email" required maxlength="160" autocomplete="email" placeholder="tu@correo.com"></label><label>¿Qué te gustaría lograr? <span>(opcional)</span><textarea id="customer-notes" rows="3" maxlength="700" placeholder="Cuéntanos tu prioridad y, si tienes web, comparte el enlace."></textarea></label></div><div class="contract-summary" id="contract-summary" aria-live="polite"></div><button type="button" id="message-toggle" class="text-button" aria-expanded="false" aria-controls="message-preview">Revisar mi solicitud</button><pre id="message-preview" hidden></pre></div><div class="contract-actions"><button type="submit" value="whatsapp" class="button primary" id="continue-wa">Continuar por WhatsApp</button><button type="submit" value="email" class="button outline" id="continue-email">Continuar por correo</button><p>Confirmaremos el alcance, la fecha y la forma de pago.<br>Esta solicitud no realiza ningún cobro.</p></div></form></dialog>
+<dialog id="privacy-dialog" class="privacy-dialog" aria-labelledby="privacy-title"><button class="icon-button close-dialog" data-close="privacy-dialog" aria-label="Cerrar privacidad"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg></button><span class="eyebrow">TUS DATOS</span><h2 id="privacy-title">Tú decides qué compartir.</h2><p>Los datos del formulario se mantienen en la memoria de esta página durante la visita. No se guardan en una base de datos ni en el almacenamiento local del navegador.</p><p>Al continuar, se prepara tu solicitud en WhatsApp o en tu aplicación de correo. Puedes revisarla antes de enviarla. No se solicita información de pago.</p><p>Este catálogo no utiliza cookies publicitarias ni herramientas de analítica.</p><button class="button outline" data-close="privacy-dialog">Entendido</button></dialog>
+<template id="service-help-template"><section class="detail-help" aria-label="Proceso y preguntas frecuentes"><h3>Antes de contratar</h3><details><summary>¿Cómo funciona la contratación?</summary><ol class="detail-steps"><li><span>01</span><div><h3>Elige el servicio</h3><p>Revisa el precio, el plan base y los entregables. Selecciona únicamente los complementos que necesites.</p></div></li><li><span>02</span><div><h3>Inicia tu contratación</h3><p>Comparte los datos de tu negocio. Recibes el alcance, la fecha de inicio y las condiciones de pago para confirmar.</p></div></li><li><span>03</span><div><h3>Nos ponemos a trabajar</h3><p>Nos das los accesos y materiales acordados. Revisamos contigo la entrega antes de ponerla en marcha.</p></div></li></ol></details><details><summary>¿El precio publicado es el que voy a pagar?</summary><p>Es el precio del plan base que aparece en la ficha. Si eliges otra variante, un complemento o un alcance adicional, lo verás y lo confirmaremos por escrito antes de iniciar. Los costos de proveedores y los impuestos aplicables se indican aparte.</p></details><details><summary>¿Puedo contratar sin saber de tecnología?</summary><p>Sí. Te explicamos los pasos en español y te pedimos solo los datos y materiales necesarios. Mantienes el control de tus cuentas y de los accesos de tu negocio.</p></details><details><summary>¿Se realiza un cobro al usar esta página?</summary><p>No. Aquí eliges e inicias la solicitud de contratación. Te confirmamos alcance, calendario y forma de pago antes de que decidas continuar. No se solicita tarjeta en este catálogo.</p></details><details><summary>¿Qué incluyen los planes mensuales?</summary><p>Las tareas y límites que figuran en cada plan. La fecha de inicio, la periodicidad y las condiciones de cancelación se establecen en la propuesta que apruebas antes del primer pago.</p></details><details><summary>¿Me garantizan una posición o un número de clientes?</summary><p>El trabajo se centra en mejorar tu presencia y facilitar el contacto. Las posiciones, las llamadas y las ventas también dependen de tu mercado, competencia y seguimiento comercial. Revisamos las métricas disponibles para decidir las siguientes acciones.</p></details></section></template>
+<noscript><p class="noscript">Activa JavaScript para explorar los planes o escribe a support@hldigitalweb.com.</p></noscript></body></html>
