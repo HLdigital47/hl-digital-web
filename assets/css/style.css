@@ -292,3 +292,44 @@ html:has(.page-home) {
 .page-home .hero-copy > p > a, .faq-list p > a, .requested-service-links a { text-decoration: underline; text-underline-offset: .18em; }
 .requested-service-links { display: flex; flex-wrap: wrap; gap: .75rem 1.5rem; padding-block: 1rem 1.75rem; }
 .desktop-nav { flex-wrap: wrap; }
+
+
+/* HL Digital — premium motion preview. Progressive enhancement only. */
+@media (prefers-reduced-motion:no-preference){
+  .page-home .hero-copy .hero-badge,.page-home .hero-copy h1,.page-home .hero-copy>p,.page-home .hero-copy .button-row,.page-home .hero-points{animation:hl-hero-enter .78s cubic-bezier(.22,1,.36,1) both}
+  .page-home .hero-copy h1{animation-delay:.1s}
+  .page-home .hero-copy>p{animation-delay:.2s}
+  .page-home .hero-copy .button-row{animation-delay:.3s}
+  .page-home .hero-points{animation-delay:.38s}
+  .page-home .hero-project{animation:hl-hero-enter .85s cubic-bezier(.22,1,.36,1) both;transition:transform .38s ease,background .3s ease,box-shadow .38s ease}
+  .page-home .hero-project:nth-child(1){animation-delay:.23s}
+  .page-home .hero-project:nth-child(2){animation-delay:.37s}
+  .page-home .hero-project:nth-child(3){animation-delay:.51s}
+  .page-home .hero-project:hover{transform:translateY(-7px);background:#faf8f719;box-shadow:0 24px 48px #0003}
+  @keyframes hl-hero-enter{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  .hl-motion-ready .hl-reveal{opacity:0;transform:translateY(25px);transition:opacity .7s ease,transform .8s cubic-bezier(.22,1,.36,1)}
+  .hl-motion-ready .hl-reveal.hl-in-view{opacity:1;transform:translateY(0)}
+  .page-home .service-card{transition:transform .36s cubic-bezier(.22,1,.36,1),box-shadow .36s ease,border-color .3s ease}
+  .page-home .service-card:hover{transform:translateY(-7px);box-shadow:0 22px 45px #3030391c;border-color:#a05a7280}
+  .page-home .service-card-image img{transition:transform .65s cubic-bezier(.22,1,.36,1)}
+  .page-home .service-card:hover .service-card-image img{transform:scale(1.055)}
+  .page-home .process-grid article{transition:box-shadow .35s, border-color .35s,transform .35s}
+  .page-home .process-grid article:hover{transform:translateY(-5px);border-color:#a05a7277;box-shadow:0 16px 36px #581c3212}
+  .page-home .process-grid{position:relative}
+  .page-home .process-grid:before{content:"";position:absolute;left:10%;right:10%;top:17px;height:2px;background:linear-gradient(90deg,#581c32,#a05a72);transform:scaleX(0);transform-origin:left;transition:transform 1.5s ease;pointer-events:none;opacity:.45}
+  .hl-motion-ready .page-home .process-grid.hl-in-view:before,.page-home.hl-motion-ready .process-grid.hl-in-view:before{transform:scaleX(1)}
+  .page-home .portfolio-invite-panel{transition:box-shadow .45s ease}
+  .page-home .portfolio-invite-panel:hover{box-shadow:0 25px 55px #581c3218}
+  .page-home .cta-section:before{content:"";position:absolute;inset:-55%;pointer-events:none;background:radial-gradient(ellipse at 45% 50%,#581c325c,transparent 55%);animation:hl-cta-glow 13s ease-in-out infinite alternate}
+  .page-home .cta-inner{position:relative}
+  @keyframes hl-cta-glow{from{transform:translateX(-9%) scale(.9)}to{transform:translateX(9%) scale(1.08)}}
+  .page-home .catalog-dialog[open],.page-home .menu-dialog[open]{animation:hl-modal-in .28s ease both}
+  @keyframes hl-modal-in{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+}
+@media(max-width:700px){
+  .page-home .process-grid:before{display:none}
+  .page-home .hero-project:hover,.page-home .service-card:hover{transform:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .hl-motion-ready .hl-reveal{opacity:1!important;transform:none!important}
+}

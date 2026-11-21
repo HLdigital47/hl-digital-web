@@ -95,6 +95,24 @@
   const tabVisibility=()=>document.body.classList.toggle('previews-background',document.hidden);
   document.addEventListener('visibilitychange',tabVisibility);tabVisibility();
  }
+
+ function setupPremiumHomeMotion(){
+  if(!document.body.classList.contains('page-home')||!('IntersectionObserver' in window)||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const revealSelectors=['.section-heading','.section-heading-copy','.service-grid .service-card','.value-grid article','.difference-grid article','.portfolio-invite-panel','.about-split>div','.promise-grid article','.process-grid article','.faq-layout>div','.faq-list','.cta-inner'];
+  const nodes=[...new Set(revealSelectors.flatMap(selector=>all(selector)))];
+  nodes.forEach(n=>n.classList.add('hl-reveal'));
+  const observer=new IntersectionObserver(entries=>{
+   entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('hl-in-view');observer.unobserve(entry.target);}});
+  },{threshold:.08,rootMargin:'0px 0px -35px 0px'});
+  nodes.forEach((node,i)=>{node.style.transitionDelay=(i%3)*75+'ms';observer.observe(node);});
+  const process=document.querySelector('.process-grid');
+  if(process)observer.observe(process);
+  document.body.classList.add('hl-motion-ready');
+  // Avoid any hidden content when returning from back/forward cache.
+  window.addEventListener('pageshow',()=>nodes.filter(n=>n.getBoundingClientRect().top<innerHeight).forEach(n=>n.classList.add('hl-in-view')));
+ }
+ setupPremiumHomeMotion();
+
  setupProjectMotion();
  const requested=new URLSearchParams(location.search).get('servicio');if(serviceMap.has(requested)){selected.add(requested);persist();}
  renderFilters();renderCatalog();updateSelection();bindForm();
