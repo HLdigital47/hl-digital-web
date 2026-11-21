@@ -6,6 +6,13 @@
  const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const serviceMap=new Map(cfg.services.map(s=>[s.id,s]));
  const key='hl_digital_agency_selection';
+ const params=new URLSearchParams(location.search);
+ const sourceProjects=new Map([
+  ['new-era','New Era Painting & Construction'],
+  ['divas','Divas Junk Removal'],
+  ['all-pro','All Pro Home Solutions']
+ ]);
+ const sourceProject=sourceProjects.get(params.get('proyecto'));
  let selected=new Set(),area='Todos',lastFocus=null;
  try{const saved=JSON.parse(localStorage.getItem(key)||'[]');if(Array.isArray(saved))selected=new Set(saved.filter(x=>serviceMap.has(x)));}catch{}
  function persist(){try{localStorage.setItem(key,JSON.stringify([...selected]));}catch{}updateSelection();}
@@ -37,7 +44,16 @@
    data.set('business',String(values.get('business')||'').trim());
    data.set('contact',String(values.get('contact')||'').trim());
    data.set('service',[...selected].map(id=>serviceMap.get(id).title).join(', ')||'Consulta general');
-   data.set('message',String(values.get('message')||'').trim());
+   const readField=name=>String(values.get(name)||'').trim();
+   const locationLabel=[readField('city'),readField('state')].filter(Boolean).join(', ');
+   const businessUrl=readField('businessUrl');
+   const details=[
+    readField('message'),
+    locationLabel && `Ubicación: ${locationLabel}`,
+    businessUrl && `Web o perfil de Google: ${businessUrl}`,
+    sourceProject && `Proyecto de origen: ${sourceProject}`
+   ];
+   data.set('message',details.filter(Boolean).join('\n'));
    data.set('website',String(values.get('website')||'').trim());
    status.textContent='Enviando tu solicitud…';status.className='form-status';
    button.disabled=true;button.textContent='Enviando…';
@@ -96,6 +112,6 @@
   document.addEventListener('visibilitychange',tabVisibility);tabVisibility();
  }
  setupProjectMotion();
- const requested=new URLSearchParams(location.search).get('servicio');if(serviceMap.has(requested)){selected.add(requested);persist();}
+ const requested=params.get('servicio');if(serviceMap.has(requested)){selected.add(requested);persist();}
  renderFilters();renderCatalog();updateSelection();bindForm();
 })();
