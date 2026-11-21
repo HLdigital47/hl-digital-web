@@ -8,61 +8,80 @@
   font-family: Georgia, serif;
   letter-spacing: -.035em;
 }
-.editorial-hero {
-  padding: clamp(3.5rem, 8vw, 8rem) 0;
-  background: radial-gradient(ellipse at 88% 28%, #ede3e9, #faf8f7 65%);
+.page-home .site-header,
+.page-home .site-header.is-sticky {
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #faf8f7;
+  border-bottom: 1px solid #3030391f;
 }
-.editorial-hero-grid,
+.page-home .site-header .nav-shell {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding-block: .85rem;
+}
+.editorial-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #301723;
+  color: #faf8f7;
+}
+.editorial-hero-photo {
+  position: absolute;
+  z-index: -2;
+  top: 0;
+  right: 0;
+  width: 68%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 47%;
+}
+.editorial-hero::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(90deg, #301723 25%, #301723ed 39%, #3017236b 70%, #210e183d);
+}
+.editorial-hero-grid {
+  position: relative;
+  display: grid;
+  align-content: center;
+  min-height: clamp(37rem, 52vw, 47rem);
+  padding-block: 8rem 6rem;
+}
+.editorial-hero-copy { max-width: 43rem; }
+.editorial-hero h1 {
+  font-size: clamp(2.7rem, 5.7vw, 5.65rem);
+  font-weight: 400;
+  line-height: 1.02;
+  margin: 0 0 1.4rem;
+}
+.editorial-hero p,
+.editorial-sara p { max-width: 48ch; margin-bottom: 1.6rem; }
+.editorial-hero p { color: #f1e6eb; }
+.editorial-hero .button.primary { background: #faf8f7; color: #581c32; }
+.editorial-hero .button.outline { border-color: #faf8f7a3; color: #faf8f7; }
+.editorial-hero a:focus-visible { outline-color: #faf8f7; }
+.editorial-photo-credit {
+  position: absolute;
+  right: 0;
+  bottom: 1.25rem;
+  color: #faf8f7;
+  background: #301723e8;
+  padding: .4rem .65rem;
+  font-size: .78rem;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
 .editorial-sara {
   display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: clamp(2rem, 6vw, 6rem);
   align-items: center;
-}
-.editorial-hero h1 {
-  font-size: clamp(2.65rem, 5.4vw, 5.6rem);
-  line-height: .99;
-  margin: 0 0 1.25rem;
-}
-.editorial-hero h1 em,
-.editorial-figure figcaption { color: #581c32; }
-.editorial-hero p,
-.editorial-sara p { max-width: 48ch; margin-bottom: 1.5rem; }
-.editorial-figure { margin: 0; padding-right: 10%; }
-.editorial-preview {
-  position: relative;
-  display: block;
-  border: 5px solid #303039;
-  border-radius: 1rem;
-  background: #303039;
-  box-shadow: 0 24px 42px #581c3226;
-}
-.editorial-address {
-  display: block;
-  padding: .55rem .75rem;
-  color: #faf8f7;
-  font-size: .8rem;
-}
-.editorial-project-image {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  object-position: top;
-  border-radius: 0 0 .65rem .65rem;
-}
-.editorial-phone {
-  position: absolute;
-  width: 26%;
-  height: auto;
-  right: -9%;
-  bottom: -8%;
-  border: 4px solid #303039;
-  border-radius: .8rem;
-  box-shadow: 0 12px 24px #30303933;
-}
-.editorial-figure figcaption {
-  margin-top: 1.75rem;
-  font: italic 1.05rem Georgia, serif;
 }
 .editorial-home h2 { font-size: clamp(2rem, 4.5vw, 4rem); }
 .editorial-home h3 { font-size: clamp(1.4rem, 2.5vw, 2rem); }
@@ -79,7 +98,7 @@
   aspect-ratio: 3 / 2;
   object-fit: cover;
   object-position: top;
-  border-radius: .55rem;
+  border-radius: .15rem;
 }
 .editorial-caption { color: #581c32; margin: 1rem 0 .35rem; }
 .editorial-case p:not(.editorial-caption),
@@ -88,6 +107,11 @@
 .editorial-sara { grid-template-columns: minmax(0, 18rem) 1fr; max-width: 58rem; }
 .editorial-sara img { width: 100%; height: auto; border-radius: .65rem; }
 @media (max-width: 740px) {
-  .editorial-hero-grid, .editorial-grid, .editorial-sara { grid-template-columns: 1fr; }
+  .editorial-hero-photo { width: 100%; object-position: 55% center; }
+  .editorial-hero::before { background: linear-gradient(90deg, #301723f2, #30172387), linear-gradient(0deg, #301723a3, transparent); }
+  .editorial-hero-grid { min-height: 34rem; padding-block: 7rem 5rem; }
+  .editorial-grid, .editorial-sara { grid-template-columns: 1fr; }
   .editorial-sara img { max-width: 15rem; }
 }
+
+#casos { scroll-margin-top: 6rem; }
