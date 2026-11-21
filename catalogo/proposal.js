@@ -17,7 +17,7 @@
     style: 'currency', currency: config.currency, maximumFractionDigits: 0
   });
   const price = plan => plan.price === null ? 'A cotizar' :
-    money.format(plan.price) + (plan.cycle === 'monthly' ? ' al mes' : ' · pago único');
+    (plan.startingAt ? 'Desde ' : '') + money.format(plan.price) + (plan.cycle === 'monthly' ? ' al mes' : ' · pago único');
 
   function element(tag, text) {
     const result = document.createElement(tag);
@@ -27,17 +27,19 @@
 
   function updateSummary() {
     const totals = { once: 0, monthly: 0, quote: 0 };
+    let onceStartingAt = false;
     const lines = ['Hola, HL Digital. Quiero una propuesta para estos servicios:', ''];
     for (const [id, index] of selected) {
       const service = services.get(id);
       const plan = service.variants[index];
       if (plan.price === null) totals.quote++;
       else totals[plan.cycle] += plan.price;
+      if (plan.cycle === 'once' && plan.startingAt) onceStartingAt = true;
       lines.push(`• ${service.name} · ${plan.name} · ${price(plan)}`);
     }
 
     const charges = [
-      ['Pago único', money.format(totals.once)],
+      ['Pago único', (onceStartingAt ? 'Desde ' : '') + money.format(totals.once)],
       ['Mensual', money.format(totals.monthly)],
       ['Servicios pendientes de cotizar', String(totals.quote)]
     ];

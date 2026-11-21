@@ -178,7 +178,7 @@ window.CATALOG_CONFIG = {
       "variants": [
         {
           "name": "Landing Esencial",
-          "price": 497,
+          "price": 250,
           "cycle": "once",
           "scope": "1 página · hasta 6 secciones",
           "includes": [
@@ -187,11 +187,18 @@ window.CATALOG_CONFIG = {
             "Formulario y botones de contacto",
             "SEO inicial y 2 rondas de ajustes"
           ],
-          "exclusions": "Textos base e imágenes proporcionados por el cliente. Dominio, planes de correo y servicios de terceros se pagan aparte. No incluye pagos en línea ni tienda."
+          "exclusions": "Textos base e imágenes proporcionados por el cliente. Dominio, planes de correo y servicios de terceros se pagan aparte. No incluye pagos en línea ni tienda.",
+          "startingAt": true,
+          "example": {
+            "title": "All Pro Home Solutions",
+            "text": "Organicé servicios de roofing, pintura, plomería y mejoras del hogar con un acceso claro a cotización.",
+            "url": "https://allprohomesolutionsga.com/",
+            "image": "assets/all-pro-web-320.webp"
+          }
         },
         {
           "name": "Web de Negocio",
-          "price": 997,
+          "price": 700,
           "cycle": "once",
           "scope": "Hasta 5 páginas informativas",
           "includes": [
@@ -200,17 +207,17 @@ window.CATALOG_CONFIG = {
             "Formulario, WhatsApp y llamada directa",
             "SEO inicial y 2 rondas de ajustes"
           ],
-          "exclusions": "Dominio, correo y suscripciones de terceros se pagan aparte. No incluye una tienda ni fotografía. Se define el contenido de cada página antes de iniciar."
+          "exclusions": "Dominio, correo y suscripciones de terceros se pagan aparte. No incluye una tienda ni fotografía. Se define el contenido de cada página antes de iniciar.",
+          "startingAt": true,
+          "example": {
+            "title": "AV Roofing",
+            "text": "Sitio con páginas de servicios y áreas de cobertura, con acceso directo a llamada y cotización.",
+            "url": "https://av-roofing-website.pages.dev/"
+          }
         }
       ],
       "materials": "Servicios, ciudades, información de contacto y fotos de tus trabajos.",
-      "delivery": "Recibes la web acordada y los accesos detallados en la propuesta.",
-      "example": {
-        "title": "All Pro Home Solutions",
-        "text": "Organicé servicios de roofing, pintura, plomería y mejoras del hogar con un acceso claro a cotización.",
-        "url": "https://allprohomesolutionsga.com/",
-        "image": "assets/all-pro-web-320.webp"
-      }
+      "delivery": "Recibes la web acordada y los accesos detallados en la propuesta."
     },
     {
       "id": "catalogo",
