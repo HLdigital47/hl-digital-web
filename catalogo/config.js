@@ -212,7 +212,7 @@ window.CATALOG_CONFIG = {
           "example": {
             "title": "AV Roofing",
             "text": "Sitio con páginas de servicios y áreas de cobertura, con acceso directo a llamada y cotización.",
-            "url": "https://av-roofing-website.pages.dev/"
+            "url": "https://thegutterguyavroofinginc.com/"
           }
         }
       ],
