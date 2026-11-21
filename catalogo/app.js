@@ -8,6 +8,16 @@
  const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:cfg.currency,maximumFractionDigits:0}).format(n);
  const cycle=v=>v.cycle==='monthly'?'mes':'pago único';
  const services=new Map(cfg.services.map(s=>[s.id,s]));
+ // Use the same Apps Script deployment as HL Digital's general contact form.
+ // Opaque no-cors responses cannot establish server-side delivery or persistence.
+ async function sendRequest(fields){
+  if(!cfg.formEndpoint)throw new Error('El formulario no está configurado');
+  const data=new URLSearchParams();
+  for(const [key,value] of Object.entries(fields))data.set(key,String(value??''));
+  await fetch(cfg.formEndpoint,{method:'POST',mode:'no-cors',body:data,redirect:'follow'});
+ }
+ window.HL_CATALOG_SEND=sendRequest;
+
  const initialParams=new URLSearchParams(location.search);
  const directService=services.get(initialParams.get('servicio'));
  const initialArea=directService?.group||initialParams.get('area');
@@ -121,10 +131,22 @@
  $('clear-search').addEventListener('click',()=>{state.query='';$('search').value='';renderGroups();$('search').focus({preventScroll:true});});
  ['customer-name','customer-business','customer-email','customer-notes'].forEach(id=>$(id).addEventListener('input',updateMessage));
  $('message-toggle').addEventListener('click',()=>{const show=$('message-preview').hidden;$('message-preview').hidden=!show;$('message-toggle').setAttribute('aria-expanded',String(show));$('message-toggle').textContent=show?'Ocultar mi solicitud':'Revisar mi solicitud';});
- $('contract-form').addEventListener('submit',e=>{e.preventDefault();const msg=message();if(e.submitter?.value==='email'){location.href=`mailto:${cfg.email}?subject=${encodeURIComponent('Iniciar contratación · '+services.get(state.service).name)}&body=${encodeURIComponent(msg)}`;}else{window.open(`https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(msg)}`,'_blank','noopener,noreferrer');}});
+ $('contract-form').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const form=e.currentTarget;if(!form.reportValidity())return;
+  const button=$('continue-wa'),status=$('contract-send-status');
+  button.disabled=true;button.textContent='Enviando…';status.textContent='Transmitiendo tu solicitud…';
+  try{
+   const s=services.get(state.service);
+   await sendRequest({name:$('customer-name').value.trim(),business:$('customer-business').value.trim(),contact:$('customer-email').value.trim(),service:s.name+' · '+s.variants[state.variant].name,message:message(),website:'',source:'catalogo-plan'});
+   status.textContent='Solicitud transmitida. Gracias por contactar a HL Digital; revisaremos los datos recibidos.';
+   form.reset();state.addons.clear();renderContract();$('message-preview').hidden=true;
+  }catch(err){status.textContent='No pudimos transmitir tu solicitud. Intenta de nuevo o escríbenos a support@hldigitalweb.com.';}
+  finally{button.disabled=false;button.textContent='Enviar solicitud';}
+ });
  $('privacy-open').addEventListener('click',()=>open('privacy-dialog'));
  all('dialog').forEach(d=>{d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)close(d.id);}});d.addEventListener('close',()=>{if(d.id==='service-dialog'){const u=new URL(location.href);u.searchParams.delete('servicio');history.replaceState(null,'',u);}if(!all('dialog[open]').length){if(state.opener?.isConnected&&state.opener.getClientRects().length)state.opener.focus({preventScroll:true});else all('[data-contract]').find(b=>b.dataset.contract===state.service)?.focus({preventScroll:true});}});});
- $('advice-link').href=`https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent('Hola, HL Digital. Quiero orientación para elegir el servicio adecuado para mi negocio.')}`;$('advice-link').target='_blank';$('advice-link').rel='noopener noreferrer';
+
  $('catalog-count').textContent=`${cfg.services.length} servicios · ${cfg.groups.length} categorías`;
  const advisor=$('advisor-form');
  const output=$('advisor-result');
