@@ -12,7 +12,7 @@
  const directService=services.get(initialParams.get('servicio'));
  const initialArea=directService?.group||initialParams.get('area');
  const state={area:cfg.groups.some(g=>g.id===initialArea)?initialArea:cfg.groups[0].id,query:'',service:null,variant:0,addons:new Set(),detail:null,opener:null};
- const priceText=v=>v.price===null?'A cotizar':`${money(v.price)} / ${cycle(v)}`;
+ const priceText=v=>v.price===null?'A cotizar':`${v.startingAt?'Desde ':''}${money(v.price)} / ${cycle(v)}`;
  const base=s=>s.variants[0];
  function renderGroups(){
   let matches=0;
@@ -33,18 +33,19 @@
  }
  function open(id,opener=document.activeElement){if($(id).open)return;state.opener=opener;$(id).showModal();}
  function close(id){if($(id).open)$(id).close();}
- function serviceFacts(service){
-  const {materials,delivery,example}=service;
-  const work=example?`<div class="service-example">
+ function projectExample(example){
+  return example?`<div class="service-example">
     ${example.image?`<img src="${esc(example.image)}" alt="Captura de la web de ${esc(example.title)}" width="320" height="570" loading="lazy">`:''}
     <div><h3>${esc(example.title)}</h3><p>${esc(example.text)}</p>
     ${example.url?`<a class="text-button" href="${esc(example.url)}" target="_blank" rel="noopener noreferrer">Ver el proyecto</a>`:''}</div>
   </div>`:'';
-  return `${materials?`<dl class="service-facts"><dt>Qué necesito de ti</dt><dd>${esc(materials)}</dd><dt>Qué recibes</dt><dd>${esc(delivery)}</dd></dl>`:''}${work}`;
+ }
+ function serviceFacts({materials,delivery,example}){
+  return `${materials?`<dl class="service-facts"><dt>Qué necesito de ti</dt><dd>${esc(materials)}</dd><dt>Qué recibes</dt><dd>${esc(delivery)}</dd></dl>`:''}${projectExample(example)}`;
  }
  function showDetail(id){
   const s=services.get(id);if(!s)return;state.detail=id;
-  $('service-detail').innerHTML=`<div class="detail-art"><img src="${esc(s.image)}" alt="" width="600" height="400"></div><div class="detail-copy"><span class="eyebrow">${esc(cfg.groups.find(g=>g.id===s.group).name)}</span><h2 id="service-title">${esc(s.name)}</h2><p class="detail-benefit">${esc(s.benefit)}</p><p>${esc(s.description)}</p>${serviceFacts(s)}<div class="variant-details">${s.variants.map((v,i)=>`<section><div class="variant-top"><h3>${esc(v.name)}</h3><strong>${priceText(v)}</strong></div><p class="variant-scope">${esc(v.scope)}</p><ul class="include-list">${v.includes.map(t=>`<li>${esc(t)}</li>`).join('')}</ul><p class="scope-note">${esc(v.exclusions)}</p><button class="button primary" data-contract="${esc(s.id)}" data-variant="${i}">${v.price===null?'Solicitar propuesta':v.cycle==='monthly'?'Contratar Plan':'Adquirir Servicio'}</button></section>`).join('')}</div></div>`;
+  $('service-detail').innerHTML=`<div class="detail-art"><img src="${esc(s.image)}" alt="" width="600" height="400"></div><div class="detail-copy"><span class="eyebrow">${esc(cfg.groups.find(g=>g.id===s.group).name)}</span><h2 id="service-title">${esc(s.name)}</h2><p class="detail-benefit">${esc(s.benefit)}</p><p>${esc(s.description)}</p>${serviceFacts(s)}<div class="variant-details">${s.variants.map((v,i)=>`<section><div class="variant-top"><h3>${esc(v.name)}</h3><strong>${priceText(v)}</strong></div><p class="variant-scope">${esc(v.scope)}</p><ul class="include-list">${v.includes.map(t=>`<li>${esc(t)}</li>`).join('')}</ul><p class="scope-note">${esc(v.exclusions)}</p>${projectExample(v.example)}<button class="button primary" data-contract="${esc(s.id)}" data-variant="${i}">${v.price===null?'Solicitar propuesta':v.cycle==='monthly'?'Contratar Plan':'Adquirir Servicio'}</button></section>`).join('')}</div></div>`;
   const copy=$('service-detail').querySelector('.detail-copy');
   if(s.id==='contenido-redes')copy.append($('social-samples').content.cloneNode(true));
   copy.append($('service-help-template').content.cloneNode(true));
@@ -67,7 +68,7 @@
  }
  function updateSummary(){
   const s=services.get(state.service);if(!s)return;const v=s.variants[state.variant];const extra=cfg.bonuses.filter(b=>state.addons.has(b.id)&&!b.included.includes(s.id)).reduce((n,b)=>n+b.price,0);
-  $('contract-summary').innerHTML=`<span class="step-label">RESUMEN DEL SERVICIO</span><div><span>${esc(v.name)}</span><strong>${priceText(v)}</strong></div>${extra?`<div><span>Complementos elegidos</span><strong>${money(extra)} / pago único</strong></div>`:''}<div class="summary-total"><span>${v.cycle==='monthly'?'Primer mes'+(extra?' + complementos':''):'Base del proyecto'}</span><strong>${v.price===null?'A cotizar':money(v.price+extra)}</strong></div>${v.cycle==='monthly'?`<small>Después: ${money(v.price)} al mes según las condiciones que se confirmen.</small>`:''}<small>No incluye costos de proveedores ni impuestos aplicables.</small>`;
+  $('contract-summary').innerHTML=`<span class="step-label">RESUMEN DEL SERVICIO</span><div><span>${esc(v.name)}</span><strong>${priceText(v)}</strong></div>${extra?`<div><span>Complementos elegidos</span><strong>${money(extra)} / pago único</strong></div>`:''}<div class="summary-total"><span>${v.cycle==='monthly'?'Primer mes'+(extra?' + complementos':''):'Base del proyecto'}</span><strong>${v.price===null?'A cotizar':`${v.startingAt?'Desde ':''}${money(v.price+extra)}`}</strong></div>${v.cycle==='monthly'?`<small>Después: ${money(v.price)} al mes según las condiciones que se confirmen.</small>`:''}<small>No incluye costos de proveedores ni impuestos aplicables.</small>`;
   updateMessage();
  }
  function message(){
