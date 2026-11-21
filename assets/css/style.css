@@ -117,6 +117,8 @@ a.hero-project:hover{border-color:#faf8f780}
 .page-home .service-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  align-items: stretch;
   gap: clamp(20px, 2.4vw, 30px);
 }
 
@@ -134,6 +136,7 @@ a.hero-project:hover{border-color:#faf8f780}
 }
 
 .page-home .service-card-image {
+  flex: none;
   aspect-ratio: 4 / 3;
   overflow: hidden;
   border-radius: 7px 7px 0 0;
@@ -158,6 +161,7 @@ a.hero-project:hover{border-color:#faf8f780}
 
 .page-home .service-card h3 {
   font: 400 clamp(1.65rem, 3vw, 2.2rem)/1.13 Georgia, serif;
+  min-block-size: calc(2lh + 15px);
   padding-bottom: 14px;
   border-bottom: 1px solid var(--line);
   margin: 0;
@@ -223,7 +227,8 @@ a.hero-project:hover{border-color:#faf8f780}
 }
 
 @media (max-width: 700px) {
-  .page-home .service-grid { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .page-home .service-grid { grid-template-columns: minmax(0, 1fr); grid-auto-rows: auto; gap: 24px; }
+  .page-home .service-card h3 { min-block-size: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -235,4 +240,50 @@ a.hero-project:hover{border-color:#faf8f780}
   .page-home .service-card:is(:hover, :focus-visible),
   .page-home .service-card:is(:hover, :focus-visible) img,
   .page-home .service-card:is(:hover, :focus-visible) .service-card-shaft { transform: none; }
+}
+
+/* Floating actions on the homepage */
+.page-home {
+  --home-actions-clearance: calc(92px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: var(--home-actions-clearance);
+}
+
+html:has(.page-home) {
+  scroll-padding-bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+}
+
+.page-home .home-floating-actions {
+  position: fixed;
+  z-index: 80;
+  right: max(22px, calc(env(safe-area-inset-right, 0px) + 12px));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-home .home-floating-actions :is(.catalog-float, .whatsapp-floating) {
+  position: static;
+}
+
+@media (max-width: 700px) {
+  .page-home .home-floating-actions {
+    right: max(16px, calc(env(safe-area-inset-right, 0px) + 12px));
+  }
+
+  .page-home .home-floating-actions .catalog-float {
+    min-height: 44px;
+    padding: 8px 10px 8px 12px;
+    gap: 7px;
+  }
+
+  .page-home .home-floating-actions .whatsapp-floating {
+    width: 46px;
+    height: 46px;
+  }
+
+  .page-home .home-floating-actions .whatsapp-floating img {
+    width: 34px;
+    height: 34px;
+  }
 }
