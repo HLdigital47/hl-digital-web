@@ -1,5 +1,6 @@
 window.CATALOG_CONFIG = {
   "businessName": "HL Digital",
+  "formEndpoint": "https://script.google.com/macros/s/AKfycbxClOpsU1AxYpk_23fy0ggIlwH71ILmZj7Ec1RrxZAkJqdgszBxWYVDPLmT0i4FuiQ48g/exec",
   "whatsapp": "13465412861",
   "email": "support@hldigitalweb.com",
   "currency": "USD",
