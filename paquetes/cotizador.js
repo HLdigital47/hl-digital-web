@@ -130,13 +130,25 @@
   });
   form.addEventListener('reset',event=>{event.preventDefault();form.querySelectorAll('.client-fields input,.client-fields textarea').forEach(input=>input.value='');state=initialState();render();});
   document.querySelectorAll('[data-pick-package]').forEach(button=>button.addEventListener('click',()=>{selectPackage(button.dataset.pickPackage);el('cotizador').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});form.querySelector('input[name=package]:checked').focus({preventScroll:true});}));
-  form.addEventListener('submit',event=>{
+  form.addEventListener('submit',async event=>{
     event.preventDefault();if(!form.reportValidity())return;
     const r=calculate(state);if(!r.valid)return;
     const data=new FormData(form),v=name=>String(data.get(name)||'').trim();
-    if(['business','contact','city'].some(name=>!v(name))){alert('Completa el nombre del negocio, el nombre de contacto y la ciudad con información válida.');return;}
-    const text=buildMessage(state,Object.fromEntries(data));
-    window.open('https://wa.me/13465412861?text='+encodeURIComponent(text),'_blank','noopener,noreferrer');
+    if(['business','contact','city'].some(name=>!v(name))){alert('Completa el nombre del negocio, nombre de contacto y ciudad.');return;}
+    const details=buildMessage(state,Object.fromEntries(data));
+    const payload=new URLSearchParams();
+    payload.set('name',v('contact'));payload.set('business',v('business'));
+    payload.set('contact',v('email'));payload.set('service',state.package?'Paquete: '+state.package:'Cotización personalizada');
+    payload.set('message',details+'\\nTeléfono: '+v('phone'));
+    payload.set('website','');payload.set('source','paquetes-cotizador');
+    const button=el('proposal-button'),status=el('quote-status');
+    button.disabled=true;button.textContent='Enviando…';status.textContent='Transmitiendo tu solicitud…';
+    try{
+      await fetch('https://script.google.com/macros/s/AKfycbxClOpsU1AxYpk_23fy0ggIlwH71ILmZj7Ec1RrxZAkJqdgszBxWYVDPLmT0i4FuiQ48g/exec',{method:'POST',mode:'no-cors',body:payload,redirect:'follow'});
+      status.textContent='Solicitud transmitida. HL Digital revisará los datos recibidos.';
+      form.querySelectorAll('.client-fields input,.client-fields textarea').forEach(input=>input.value='');
+    }catch(error){status.textContent='No pudimos transmitir tu solicitud. Intenta de nuevo o escríbenos a support@hldigitalweb.com.';}
+    finally{button.textContent='Solicitar mi propuesta';button.disabled=false;}
   });
   el('quote-app').hidden=false;render();
 })();
